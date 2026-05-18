@@ -1,4 +1,4 @@
-# Premium Streaming Platform MVP
+# OTT-film — Premium Streaming Platform MVP
 
 Documentation for a Netflix-quality streaming frontend (original brand). **Application code is built from scratch** per `JULES_TZ.md` (Google Jules).
 
