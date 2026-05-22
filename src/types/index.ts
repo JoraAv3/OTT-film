@@ -75,3 +75,9 @@ export interface SubscriptionPlan {
   features: string[];
   isPopular?: boolean;
 }
+
+export interface WatchProgress {
+  contentId: string;
+  progress: number; // 0 to 1
+  lastWatchedAt: string;
+}

@@ -576,3 +576,8 @@ export const MOCK_PLANS: SubscriptionPlan[] = [
     features: ['4K + HDR resolution', '4 screens at a time', 'No ads', 'Spatial audio']
   }
 ];
+
+export const MOCK_WATCH_PROGRESS = [
+  { contentId: 'm1', progress: 0.65, lastWatchedAt: '2024-05-20T14:30:00Z' },
+  { contentId: 's1', progress: 0.22, lastWatchedAt: '2024-05-21T20:15:00Z' }
+];

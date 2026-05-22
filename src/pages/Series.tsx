@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { contentService } from '@/services/mock/content.service';
-import { MovieCarousel } from '@/widgets/MovieCarousel';
 import { FilterPanel } from '@/widgets/FilterPanel';
+import { MovieCard } from '@/shared/ui/MovieCard';
 import { Series } from '@/types';
 
 export const SeriesPage = () => {
@@ -29,28 +29,35 @@ export const SeriesPage = () => {
 
   return (
     <div className="pt-24 pb-20 px-4 md:px-12">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold">TV Series</h1>
-          <p className="text-gray-500 mt-1">Epic sagas and binge-worthy shows</p>
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight">TV Series</h1>
+          <p className="text-gray-500 mt-2 text-lg">Epic sagas and binge-worthy shows</p>
         </div>
         <FilterPanel onFilter={handleFilter} />
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-10 md:gap-x-6 md:gap-y-12">
           {[...Array(12)].map((_, i) => (
             <div key={i} className="aspect-[2/3] bg-gray-200 dark:bg-[#1C1C24] animate-pulse rounded-lg" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-          {filteredSeries.map(item => (
-            <div key={item.id} className="w-full flex justify-center">
-               <MovieCarousel title="" items={[item]} />
+        <>
+          {filteredSeries.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-10 md:gap-x-6 md:gap-y-12">
+              {filteredSeries.map(item => (
+                <MovieCard key={item.id} content={item} />
+              ))}
             </div>
-          ))}
-        </div>
+          ) : (
+            <div className="text-center py-32">
+              <h3 className="text-2xl font-bold mb-3">No series found</h3>
+              <p className="text-gray-500">Try adjusting your filters to find what you're looking for.</p>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
