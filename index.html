@@ -5,6 +5,19 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LUMINA — Premium Streaming</title>
+    <script>
+      (function() {
+        try {
+          var theme = JSON.parse(localStorage.getItem('theme-storage')).state.theme;
+          var root = window.document.documentElement;
+          if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            root.classList.add('dark');
+          } else {
+            root.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body class="bg-white dark:bg-[#0B0B0F] text-[#0B0B0F] dark:text-white transition-colors duration-300">
     <div id="root"></div>

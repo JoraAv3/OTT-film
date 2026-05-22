@@ -1,5 +1,5 @@
 import { Content, Movie, Series } from '@/types';
-import { MOCK_MOVIES, MOCK_SERIES } from '@/data/mocks';
+import { MOCK_MOVIES, MOCK_SERIES, MOCK_WATCH_PROGRESS } from '@/data/mocks';
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
 const SIMULATED_DELAY = 500;
@@ -49,6 +49,17 @@ export const contentService = {
           item.title.toLowerCase().includes(q) ||
           item.genres.some(g => g.toLowerCase().includes(q))
       );
+    }
+    return [];
+  },
+
+  async getWatchProgress(): Promise<{ content: Content; progress: number }[]> {
+    if (USE_MOCK) {
+      await delay(SIMULATED_DELAY);
+      return MOCK_WATCH_PROGRESS.map(p => {
+        const content = [...MOCK_MOVIES, ...MOCK_SERIES].find(c => c.id === p.contentId);
+        return { content: content!, progress: p.progress };
+      }).filter(p => p.content);
     }
     return [];
   }
