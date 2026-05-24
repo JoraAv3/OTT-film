@@ -1,0 +1,3 @@
+## 2025-05-24 - Reference Stability in Carousels
+**Learning:** In components like `Home.tsx` that render multiple carousels, inline `.filter()` or `.map()` operations on data create new array references on every render. This completely bypasses `React.memo()` optimizations on child components (`MovieCarousel`), leading to heavy re-renders during interactions like scrolling or hovering.
+**Action:** Always wrap data transformations (filtering, sorting) in `useMemo` when the result is passed as a prop to a memoized child component. This ensures reference stability and allows `React.memo` to skip unnecessary renders.
