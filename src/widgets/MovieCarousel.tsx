@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, memo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { MovieCard } from '@/shared/ui/MovieCard';
 import { Content } from '@/types';
@@ -8,7 +8,16 @@ interface MovieCarouselProps {
   items: Content[];
 }
 
-export const MovieCarousel = ({ title, items }: MovieCarouselProps) => {
+/**
+ * MovieCarousel displays a row of MovieCards with horizontal scrolling.
+ *
+ * Performance Optimization: Wrapped in React.memo to ensure that the carousel
+ * only re-renders when its title or items change. In conjunction with useMemo
+ * for the items list in parent components, this significantly reduces re-renders
+ * during application state updates.
+ * Expected Impact: Minimizes re-renders for rows that haven't changed.
+ */
+export const MovieCarousel = memo(({ title, items }: MovieCarouselProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -59,4 +68,6 @@ export const MovieCarousel = ({ title, items }: MovieCarouselProps) => {
       </div>
     </section>
   );
-};
+});
+
+MovieCarousel.displayName = 'MovieCarousel';
