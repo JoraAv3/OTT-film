@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { contentService } from '@/services/mock/content.service';
-import { MovieCarousel } from '@/widgets/MovieCarousel';
+import { MovieCard } from '@/shared/ui/MovieCard';
 import { FilterPanel } from '@/widgets/FilterPanel';
 import { Series } from '@/types';
 
@@ -19,13 +19,14 @@ export const SeriesPage = () => {
     fetch();
   }, []);
 
-  const handleFilter = (filters: any) => {
+  // useCallback prevents FilterPanel from re-rendering unnecessarily
+  const handleFilter = useCallback((filters: any) => {
     let result = [...series];
     if (filters.genre) result = result.filter(m => m.genres.includes(filters.genre));
     if (filters.year) result = result.filter(m => m.year === parseInt(filters.year));
     if (filters.rating) result = result.filter(m => m.rating >= parseFloat(filters.rating));
     setFilteredSeries(result);
-  };
+  }, [series]);
 
   return (
     <div className="pt-24 pb-20 px-4 md:px-12">
@@ -44,11 +45,13 @@ export const SeriesPage = () => {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+        /*
+           Optimization: Using a direct CSS Grid instead of wrapping items in
+           unnecessary carousel components reduces DOM depth and component overhead.
+        */
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-10">
           {filteredSeries.map(item => (
-            <div key={item.id} className="w-full flex justify-center">
-               <MovieCarousel title="" items={[item]} />
-            </div>
+            <MovieCard key={item.id} content={item} />
           ))}
         </div>
       )}

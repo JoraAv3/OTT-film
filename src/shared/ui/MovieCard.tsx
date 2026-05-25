@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { Play, Plus, Star } from 'lucide-react';
 import { Content } from '@/types';
@@ -7,7 +8,12 @@ interface MovieCardProps {
   content: Content;
 }
 
-export const MovieCard = ({ content }: MovieCardProps) => {
+/**
+ * MovieCard is memoized to prevent unnecessary re-renders when parent carousels
+ * or grids update. Since this component is rendered frequently in large lists,
+ * memoization provides a significant reduction in reconciliation overhead.
+ */
+export const MovieCard = memo(({ content }: MovieCardProps) => {
   return (
     <div className="group relative flex-none w-[140px] md:w-[180px] transition-all duration-300 transform hover:scale-110 hover:z-20">
       <Link to={`/${content.type}/${content.id}`}>
@@ -47,4 +53,4 @@ export const MovieCard = ({ content }: MovieCardProps) => {
       </div>
     </div>
   );
-};
+});
