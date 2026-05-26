@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { contentService } from '@/services/mock/content.service';
-import { MovieCarousel } from '@/widgets/MovieCarousel';
+import { MovieCard } from '@/shared/ui/MovieCard';
 import { FilterPanel } from '@/widgets/FilterPanel';
 import { Movie } from '@/types';
 
@@ -19,7 +19,8 @@ export const Movies = () => {
     fetch();
   }, []);
 
-  const handleFilter = (filters: any) => {
+  // Performance: Memoize filter handler
+  const handleFilter = useCallback((filters: any) => {
     let result = [...movies];
 
     if (filters.genre) {
@@ -33,7 +34,7 @@ export const Movies = () => {
     }
 
     setFilteredMovies(result);
-  };
+  }, [movies]);
 
   return (
     <div className="pt-24 pb-20 px-4 md:px-12">
@@ -56,10 +57,10 @@ export const Movies = () => {
           {filteredMovies.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
               {filteredMovies.map(movie => (
-                <div key={movie.id} className="w-full">
-                  <MovieCarousel title="" items={[movie]} />
-                  {/* Reuse card logic instead of carousel for grid if needed,
-                      but for MVP grid of MovieCards is better */}
+                <div key={movie.id} className="w-full flex justify-center">
+                  {/* Optimization: Use MovieCard directly instead of wrapping in a Carousel for grid layouts.
+                      This avoids unnecessary hooks, DOM nodes, and event listeners per item. */}
+                  <MovieCard content={movie} />
                 </div>
               ))}
             </div>
