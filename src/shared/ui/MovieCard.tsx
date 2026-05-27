@@ -1,23 +1,34 @@
 import { Link } from 'react-router-dom';
 import { Play, Plus, Star } from 'lucide-react';
 import { Content } from '@/types';
-import { formatDuration } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/utils';
 
 interface MovieCardProps {
   content: Content;
+  isContinueWatching?: boolean;
+  progress?: number;
 }
 
-export const MovieCard = ({ content }: MovieCardProps) => {
+export const MovieCard = ({ content, isContinueWatching, progress }: MovieCardProps) => {
   return (
-    <div className="group relative flex-none w-[140px] md:w-[180px] transition-all duration-300 transform hover:scale-110 hover:z-20">
+    <div className="group relative flex-none w-[140px] md:w-[180px] transition-all duration-300 transform hover:scale-108 hover:z-20">
       <Link to={`/${content.type}/${content.id}`}>
-        <div className="aspect-[2/3] rounded-lg overflow-hidden bg-gray-200 dark:bg-[#1C1C24] shadow-lg">
+        <div className="aspect-[2/3] rounded-lg overflow-hidden bg-gray-200 dark:bg-[#1C1C24] shadow-lg relative">
           <img
             src={content.media.posterUrl}
             alt={content.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:brightness-50"
             loading="lazy"
           />
+
+          {isContinueWatching && progress !== undefined && (
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/40">
+              <div
+                className="h-full bg-accent"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          )}
         </div>
       </Link>
 
@@ -32,6 +43,15 @@ export const MovieCard = ({ content }: MovieCardProps) => {
           <span className="text-[10px] text-gray-300">{content.year}</span>
           <span className="text-[10px] px-1 border border-gray-500 rounded text-gray-300 uppercase">{content.ageRating}</span>
         </div>
+
+        {isContinueWatching && progress !== undefined && (
+          <div className="mt-2 h-1 w-full bg-white/20 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-accent"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        )}
 
         <div className="flex items-center gap-2 mt-2 pointer-events-auto">
           <Link

@@ -12,6 +12,7 @@ import { Favorites } from '@/pages/Favorites';
 import { WatchPage } from '@/pages/WatchPage';
 import { Login } from '@/pages/Login';
 import { Register } from '@/pages/Register';
+import { ForgotPassword } from '@/pages/ForgotPassword';
 import { Profile } from '@/pages/Profile';
 import { Subscription } from '@/pages/Subscription';
 import { PrivacyPolicy } from '@/pages/PrivacyPolicy';
@@ -43,7 +44,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/watch/:id" element={<WatchPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<NotFound />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

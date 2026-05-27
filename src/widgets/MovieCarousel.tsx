@@ -2,13 +2,16 @@ import { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { MovieCard } from '@/shared/ui/MovieCard';
 import { Content } from '@/types';
+import { cn } from '@/shared/lib/utils';
 
 interface MovieCarouselProps {
   title: string;
   items: Content[];
+  isContinueWatching?: boolean;
+  showRank?: boolean;
 }
 
-export const MovieCarousel = ({ title, items }: MovieCarouselProps) => {
+export const MovieCarousel = ({ title, items, isContinueWatching, showRank }: MovieCarouselProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -45,8 +48,19 @@ export const MovieCarousel = ({ title, items }: MovieCarouselProps) => {
           ref={scrollRef}
           className="flex gap-3 md:gap-4 overflow-x-auto px-4 md:px-12 no-scrollbar scroll-smooth"
         >
-          {items.map((item) => (
-            <MovieCard key={item.id} content={item} />
+          {items.map((item, index) => (
+            <div key={item.id} className="flex items-center">
+              {showRank && (
+                <span className="text-6xl md:text-8xl font-black text-gray-400/30 -mr-4 md:-mr-8 z-0 italic outline-text">
+                  {index + 1}
+                </span>
+              )}
+              <MovieCard
+                content={item}
+                isContinueWatching={isContinueWatching}
+                progress={isContinueWatching ? 35 : undefined} // Mock progress for demo
+              />
+            </div>
           ))}
         </div>
 
