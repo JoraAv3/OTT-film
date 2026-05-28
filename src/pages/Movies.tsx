@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { contentService } from '@/services/mock/content.service';
-import { MovieCarousel } from '@/widgets/MovieCarousel';
+import { MovieCard } from '@/shared/ui/MovieCard';
 import { FilterPanel } from '@/widgets/FilterPanel';
 import { Movie } from '@/types';
 
@@ -56,11 +56,7 @@ export const Movies = () => {
           {filteredMovies.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
               {filteredMovies.map(movie => (
-                <div key={movie.id} className="w-full">
-                  <MovieCarousel title="" items={[movie]} />
-                  {/* Reuse card logic instead of carousel for grid if needed,
-                      but for MVP grid of MovieCards is better */}
-                </div>
+                <MovieCard key={movie.id} content={movie} className="w-full" />
               ))}
             </div>
           ) : (

@@ -1,0 +1,3 @@
+## 2025-05-15 - [Architecture] Carousel-per-card Anti-pattern
+**Learning:** In the LUMINA codebase, the `MovieCarousel` component was being used to wrap individual `MovieCard` instances in main gallery pages (Movies/Series). This created a massive DOM overhead as each "carousel" instance included navigation buttons, scroll containers, and logic that were never used or visible, but still cost rendering and reconciliation time.
+**Action:** Always prefer flat CSS Grid layouts for gallery views. Reserve `MovieCarousel` only for distinct horizontal sections where actual side-scrolling functionality is required (e.g., "Trending Now" rows).

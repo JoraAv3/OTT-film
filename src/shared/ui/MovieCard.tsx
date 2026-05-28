@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom';
 import { Play, Plus, Star } from 'lucide-react';
 import { Content } from '@/types';
-import { formatDuration } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/utils';
 
 interface MovieCardProps {
   content: Content;
+  className?: string;
 }
 
-export const MovieCard = ({ content }: MovieCardProps) => {
+export const MovieCard = ({ content, className }: MovieCardProps) => {
   return (
-    <div className="group relative flex-none w-[140px] md:w-[180px] transition-all duration-300 transform hover:scale-110 hover:z-20">
+    <div className={cn("group relative flex-none w-[140px] md:w-[180px] transition-all duration-300 transform hover:scale-110 hover:z-20", className)}>
       <Link to={`/${content.type}/${content.id}`}>
         <div className="aspect-[2/3] rounded-lg overflow-hidden bg-gray-200 dark:bg-[#1C1C24] shadow-lg">
           <img

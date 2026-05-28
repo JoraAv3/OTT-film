@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { contentService } from '@/services/mock/content.service';
-import { MovieCarousel } from '@/widgets/MovieCarousel';
+import { MovieCard } from '@/shared/ui/MovieCard';
 import { FilterPanel } from '@/widgets/FilterPanel';
 import { Series } from '@/types';
 
@@ -46,9 +46,7 @@ export const SeriesPage = () => {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
           {filteredSeries.map(item => (
-            <div key={item.id} className="w-full flex justify-center">
-               <MovieCarousel title="" items={[item]} />
-            </div>
+            <MovieCard key={item.id} content={item} className="w-full" />
           ))}
         </div>
       )}
