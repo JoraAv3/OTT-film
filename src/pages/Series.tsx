@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { contentService } from '@/services/mock/content.service';
 import { MovieCard } from '@/shared/ui/MovieCard';
 import { FilterPanel } from '@/widgets/FilterPanel';
@@ -6,25 +6,29 @@ import { Series } from '@/types';
 
 export const SeriesPage = () => {
   const [series, setSeries] = useState<Series[]>([]);
-  const [filteredSeries, setFilteredSeries] = useState<Series[]>([]);
+  const [filters, setFilters] = useState<any>({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetch = async () => {
       const data = await contentService.getSeries();
       setSeries(data);
-      setFilteredSeries(data);
       setIsLoading(false);
     };
     fetch();
   }, []);
 
-  const handleFilter = (filters: any) => {
+  // Performance: Memoize filtered list to avoid recalculation on unrelated re-renders
+  const filteredSeries = useMemo(() => {
     let result = [...series];
     if (filters.genre) result = result.filter(m => m.genres.includes(filters.genre));
     if (filters.year) result = result.filter(m => m.year === parseInt(filters.year));
     if (filters.rating) result = result.filter(m => m.rating >= parseFloat(filters.rating));
-    setFilteredSeries(result);
+    return result;
+  }, [series, filters]);
+
+  const handleFilter = (newFilters: any) => {
+    setFilters(newFilters);
   };
 
   return (
