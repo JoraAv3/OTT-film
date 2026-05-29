@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { contentService } from '@/services/mock/content.service';
 import { MovieCard } from '@/shared/ui/MovieCard';
 import { FilterPanel } from '@/widgets/FilterPanel';
@@ -6,20 +6,20 @@ import { Movie } from '@/types';
 
 export const Movies = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
+  const [filters, setFilters] = useState<any>({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetch = async () => {
       const data = await contentService.getMovies();
       setMovies(data);
-      setFilteredMovies(data);
       setIsLoading(false);
     };
     fetch();
   }, []);
 
-  const handleFilter = (filters: any) => {
+  // Performance: Memoize filtered list to avoid recalculation on unrelated re-renders
+  const filteredMovies = useMemo(() => {
     let result = [...movies];
 
     if (filters.genre) {
@@ -32,7 +32,11 @@ export const Movies = () => {
       result = result.filter(m => m.rating >= parseFloat(filters.rating));
     }
 
-    setFilteredMovies(result);
+    return result;
+  }, [movies, filters]);
+
+  const handleFilter = (newFilters: any) => {
+    setFilters(newFilters);
   };
 
   return (
