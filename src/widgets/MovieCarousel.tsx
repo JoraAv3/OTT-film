@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, memo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { MovieCard } from '@/shared/ui/MovieCard';
 import { Content } from '@/types';
@@ -8,7 +8,12 @@ interface MovieCarouselProps {
   items: Content[];
 }
 
-export const MovieCarousel = ({ title, items }: MovieCarouselProps) => {
+/**
+ * PERFORMANCE OPTIMIZATION: MovieCarousel is memoized to skip re-renders when the
+ * home page state updates, provided the 'items' array reference remains stable.
+ * This works in conjunction with useMemo() in the Home component.
+ */
+export const MovieCarousel = memo(({ title, items }: MovieCarouselProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -59,4 +64,6 @@ export const MovieCarousel = ({ title, items }: MovieCarouselProps) => {
       </div>
     </section>
   );
-};
+});
+
+MovieCarousel.displayName = 'MovieCarousel';
