@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { contentService } from '@/services/mock/content.service';
 import { HeroBanner } from '@/widgets/HeroBanner';
 import { MovieCarousel } from '@/widgets/MovieCarousel';
@@ -25,6 +25,18 @@ export const Home = () => {
     fetch();
   }, []);
 
+  /**
+   * PERFORMANCE OPTIMIZATION: Memoize filtered lists to ensure stable array references.
+   * This prevents unnecessary re-renders of the MovieCarousel components, which are
+   * wrapped in React.memo. Without useMemo, a new array would be created on every
+   * render, triggering a full re-render of the carousel and its cards.
+   */
+  const newReleases = useMemo(() => movies.filter(m => m.year === 2024), [movies]);
+  const actionMovies = useMemo(() => movies.filter(m => m.genres.includes('Action')), [movies]);
+  const sciFiMovies = useMemo(() => movies.filter(m => m.genres.includes('Sci-Fi')), [movies]);
+  const dramaMovies = useMemo(() => movies.filter(m => m.genres.includes('Drama')), [movies]);
+  const highRatedContent = useMemo(() => [...movies, ...series].filter(i => i.rating > 8.5), [movies, series]);
+
   if (isLoading) {
     return <div className="min-h-screen bg-[#0B0B0F] animate-pulse" />;
   }
@@ -35,12 +47,12 @@ export const Home = () => {
 
       <div className="relative z-10 -mt-24 md:-mt-48">
         <MovieCarousel title="Trending Now" items={trending} />
-        <MovieCarousel title="New Releases" items={movies.filter(m => m.year === 2024)} />
+        <MovieCarousel title="New Releases" items={newReleases} />
         <MovieCarousel title="Binge-worthy Series" items={series} />
-        <MovieCarousel title="Action & Thrills" items={movies.filter(m => m.genres.includes('Action'))} />
-        <MovieCarousel title="Sci-Fi Journeys" items={movies.filter(m => m.genres.includes('Sci-Fi'))} />
-        <MovieCarousel title="Drama Selection" items={movies.filter(m => m.genres.includes('Drama'))} />
-        <MovieCarousel title="Lumina Originals" items={[...movies, ...series].filter(i => i.rating > 8.5)} />
+        <MovieCarousel title="Action & Thrills" items={actionMovies} />
+        <MovieCarousel title="Sci-Fi Journeys" items={sciFiMovies} />
+        <MovieCarousel title="Drama Selection" items={dramaMovies} />
+        <MovieCarousel title="Lumina Originals" items={highRatedContent} />
       </div>
     </div>
   );
